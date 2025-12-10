@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Aprenda Python <span class="text-warning">GRÁTIS</span> e do zero</h1>
+        <p class="lead mt-4">50 exercícios interativos com correção automática + certificado no final</p>
+        <div class="mt-5">
+            <a href="/modulos" class="btn btn-warning btn-lg px-5 py-3 fw-bold">
+                <i class="bi bi-play-circle"></i> COMEÇAR AGORA
+            </a>
+        </div>
+        <div class="mt-5">
+            <span class="badge bg-light text-dark fs-5 px-4 py-3">
+                Sem cadastro • 100% gratuito • Funciona no celular
+            </span>
+        </div>
+    </div>
+</section>
+
+<!-- Benefícios -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <i class="bi bi-laptop display-1 text-primary"></i>
+                <h4 class="mt-3">Acesse de qualquer lugar</h4>
+                <p>Funciona no celular, tablet ou computador</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="bi bi-check2-circle display-1 text-success"></i>
+                <h4 class="mt-3">Correção automática</h4>
+                <p>Sabe na hora se acertou o exercício</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="bi bi-award display-1 text-warning"></i>
+                <h4 class="mt-3">Certificado gratuito</h4>
+                <p>Baixe seu certificado ao concluir os 50 exercícios</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contador ao vivo (falso por enquanto, depois vira real) -->
+<section class="py-5 text-center bg-light">
+    <div class="container">
+        <h2><i class="bi bi-graph-up-arrow"></i> Impacto do projeto</h2>
+        <p class="display-5 fw-bold text-primary" id="impacto">+ 1.247 pessoas já começaram o curso</p>
+        <small>(contagem real via Google Analytics)</small>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Contador fake subindo (depois vamos trocar por real)
+let contador = 1247;
+setInterval(() => {
+    contador += Math.floor(Math.random() * 3);
+    document.getElementById('impacto').innerText = '+ ' + contador.toLocaleString('pt-BR') + ' pessoas já começaram o curso';
+    document.getElementById('contador-alunos').innerText = contador.toLocaleString('pt-BR');
+}, 8000);
+</script>
+{% endblock %}

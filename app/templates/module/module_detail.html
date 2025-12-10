@@ -1,0 +1,78 @@
+<!-- app/templates/module/module_detail.html -->
+{% extends "base.html" %}
+{% block title %}{{ module_name|title|replace('_', ' ') }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <a href="/modulos" class="btn btn-outline-primary mb-4">
+        Voltar para módulos
+    </a>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h1 class="display-5 fw-bold text-primary mb-4">
+                        {{ module_name|replace('_', ' ')|title }}
+                    </h1>
+
+                    <!-- Texto explicativo do módulo (você vai preencher depois) -->
+                    <div class="mb-5 lead">
+                        {% if module_name == "variaveis" %}
+                            <p>Neste módulo você vai aprender sobre variáveis, tipos de dados (int, str, float, bool), como atribuir valores e como usar a função <code>print()</code> e <code>input()</code>.</p>
+                            <h4>Conteúdo:</h4>
+                            <ul>
+                                <li>O que é uma variável</li>
+                                <li>Tipos básicos</li>
+                                <li>Conversão de tipos (int(), str(), float())</li>
+                                <li>Boas práticas de nomeação</li>
+                            </ul>
+                        {% elif module_name == "condicionais" %}
+                            <p>Aqui você vai dominar as estruturas <code>if</code>, <code>elif</code> e <code>else</code>, operadores lógicos e como tomar decisões no código.</p>
+                        {% else %}
+                            <p>Em breve: explicação completa sobre {{ module_name|title }}!</p>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <h3>Exercícios deste módulo</h3>
+                    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
+                        {% for ex_id, ex in exercises.items() %}
+                        <div class="col">
+                            <a href="/exercicio/{{ module_name }}/{{ ex_id }}" class="text-decoration-none">
+                                <div class="card h-100 border-primary shadow-sm hover-lift">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">
+                                            {{ loop.index }}. {{ ex.title }}
+                                        </h5>
+                                        <p class="card-text text-muted small">{{ ex.description }}</p>
+                                        <span class="badge bg-{% if loop.index0 in completed_exercises %}success{% else %}secondary{% endif %}">
+                                            {% if loop.index0 in completed_exercises %}Concluído{% else %}Pendente{% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Carrega progresso do localStorage
+  const completed = JSON.parse(localStorage.getItem('completed_exercises') || '[]');
+  document.querySelectorAll('.badge').forEach(badge => {
+    const text = badge.textContent.trim();
+    if (completed.includes(window.location.pathname + '/' + badge.closest('a').href.split('/').pop())) {
+      badge.classList.replace('bg-secondary', 'bg-success');
+      badge.textContent = 'Concluído';
+    }
+  });
+</script>
+{% endblock %}

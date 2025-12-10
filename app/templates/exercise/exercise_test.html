@@ -1,0 +1,110 @@
+<!-- app/templates/exercise/exercise_test.html -->
+{% extends "base.html" %} {% block title %}Exercício {{ ex_id }} - {{
+exercise.title }}{% endblock %} {% block content %}
+<div class="container py-5">
+  <a 
+    href="/modulo/getting-started/{{ topic_slug }}"
+    class="btn btn-sm btn-outline-secondary mb-3"
+  >
+    Voltar para o tópico
+  </a>
+
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Exercício {{ ex_id }}: {{ exercise.title }}</h4>
+        </div>
+        <div class="card-body">
+          <p class="lead">{{ exercise.description | safe }}</p>
+
+          <h5>Editor de código:</h5>
+          <textarea id="code-editor">{{ exercise.initial_code }}</textarea>
+
+          <div class="mt-4 text-end">
+            <button id="run-btn" class="btn btn-success btn-lg px-5">
+              RODAR CÓDIGO
+            </button>
+          </div>
+
+          <div id="result-area" class="mt-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 
+{% block scripts %}
+<!-- CodeMirror -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/python/python.min.js"></script>
+
+<style>
+    .CodeMirror { height: 400px; border: 1px solid #ddd; border-radius: 8px; }
+    .output { background: #f8f9fa; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+    .success { border-left: 5px solid #28a745; background: #d4edda; }
+    .error { border-left: 5px solid #dc3545; background: #f8d7da; }
+</style>
+
+<script>
+    const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+        mode: "python",
+        lineNumbers: true,
+        indentUnit: 4,
+        extraKeys: { "Tab": "indentMore", "Shift-Tab": "indentLess" }
+    });
+
+    document.getElementById("run-btn").addEventListener("click", async () => {
+        const code = editor.getValue();
+        const btn = document.getElementById("run-btn");
+        const resultArea = document.getElementById("result-area");
+
+        btn.disabled = true;
+        btn.innerHTML = "Executando...";
+        resultArea.innerHTML = '<div class="alert alert-info">Executando código...</div>';
+
+        try {
+            // Usa a URL ATUAL do navegador → sempre certa!
+            const url = window.location.pathname;
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                resultArea.innerHTML = `
+                    <div class="output success p-3">
+                        <h5>PARABÉNS! Você acertou!</h5>
+                        <strong>Saída:</strong><br>
+                        <pre>${result.output || "(nenhuma saída)"}</pre>
+                    </div>`;
+
+                // Salva progresso
+                let completed = JSON.parse(localStorage.getItem("completed_exercises") || "[]");
+                if (!completed.includes(url)) {
+                    completed.push(url);
+                    localStorage.setItem("completed_exercises", JSON.stringify(completed));
+                }
+            } else {
+                resultArea.innerHTML = `
+                    <div class="output error p-3">
+                        <h5>Ainda não...</h5>
+                        <strong>Erro:</strong> ${result.error || "Teste falhou"}<br><br>
+                        <strong>Saída:</strong><br>
+                        <pre>${result.output || "(nenhuma saída)"}</pre>
+                    </div>`;
+            }
+        } catch (err) {
+            resultArea.innerHTML = `<div class="alert alert-danger">Erro de conexão. Tente novamente.</div>`;
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = "RODAR CÓDIGO";
+    });
+</script>
+{% endblock %}
