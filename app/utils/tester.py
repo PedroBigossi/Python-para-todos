@@ -31,8 +31,8 @@ SAFE_BUILTINS = {
     'tuple': tuple,
     'type': type,
     'zip': zip,
-    'locals': locals,      # ← necessário para exercícios com variáveis
-    'globals': globals,    # ← bom ter
+    'locals': locals,      
+    'globals': globals,    
     'dict': dict,
     'set': set,
     'frozenset': frozenset,
@@ -62,7 +62,7 @@ def run_user_code(user_code: str, test_code: str):
             "__output__": output,
         }
 
-        # Executa o teste (também com built-ins seguros)
+        # Executa o teste
         exec(test_code, {"__builtins__": SAFE_BUILTINS}, test_locals)
 
         return {"success": True, "output": output}

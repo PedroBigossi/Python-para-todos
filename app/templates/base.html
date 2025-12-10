@@ -20,14 +20,13 @@
         .card-exercicio:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         footer { background: #212529; color: #aaa; padding: 50px 0 20px; }
         
-        /* NOVO: faz o footer ficar sempre embaixo */
+        
         html, body { height: 100%; }
         body { display: flex; flex-direction: column; }
-        main { flex: 1; } /* essa é a mágica! */
+        main { flex: 1; } 
     </style>
 </head>
 <body>
-    <!-- Navbar fixa -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">
@@ -40,13 +39,11 @@
         </div>
     </nav>
 
-    <!-- NOVO: todo o conteúdo das páginas fica aqui dentro -->
+
     <main>
         {% block content %}{% endblock %}
     </main>
-    <!-- Fim da parte nova -->
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="row">

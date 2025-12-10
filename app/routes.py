@@ -106,7 +106,6 @@ def gs_exercise(topic_slug, ex_id):
         else:
             return jsonify(result)
 
-    # GET → mostra o exercício
     return render_template(
         'exercise/exercise_test.html',
         module_name="getting-started",

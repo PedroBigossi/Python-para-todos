@@ -1,5 +1,5 @@
 # app/exercises.py
-from .utils.tester import run_user_code  # opcional, só pra não dar erro de import
+from .utils.tester import run_user_code
 
 # =========================
 # GETTING STARTED – ESTRUTURA CORRETA (lista de dicionários)
