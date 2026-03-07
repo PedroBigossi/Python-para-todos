@@ -2,11 +2,11 @@
 {% extends "base.html" %} {% block title %}Exercício {{ ex_id }} - {{
 exercise.title }}{% endblock %} {% block content %}
 <div class="container py-5">
-  <a 
-    href="/modulo/getting-started/{{ topic_slug }}"
+  <a
+    href="{{ back_url if back_url is defined else ('/modulo/getting-started/' ~ topic_slug) }}"
     class="btn btn-sm btn-outline-secondary mb-3"
   >
-    Voltar para o tópico
+    {{ back_label if back_label is defined else "Voltar" }}
   </a>
 
   <div class="row">
@@ -19,7 +19,7 @@ exercise.title }}{% endblock %} {% block content %}
           <p class="lead">{{ exercise.description | safe }}</p>
 
           <h5>Editor de código:</h5>
-          <textarea id="code-editor">{{ exercise.initial_code }}</textarea>
+          <textarea id="code-editor">{{ exercise.initial_code | default("") }}</textarea>
 
           <div class="mt-4 text-end">
             <button id="run-btn" class="btn btn-success btn-lg px-5">

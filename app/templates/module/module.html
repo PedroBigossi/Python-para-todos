@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ module.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex align-items-start align-items-md-center mb-4">
+    <a href="/modulos" class="btn btn-outline-primary me-3">
+      <i class="bi bi-arrow-left"></i> Voltar para Módulos
+    </a>
+    <div>
+      <h2 class="m-0 fw-bold text-primary">{{ module.title }}</h2>
+      {% if module.description %}
+      <div class="text-muted">{{ module.description }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- SIDEBAR -->
+    <div class="col-lg-3 mb-4">
+      <h4 class="fw-bold mb-3">Lições</h4>
+      <div class="list-group">
+        {% for lesson in lessons %}
+        <a
+          href="{{ url_for('main.module_view', module_slug=module.slug, lesson_slug=lesson.slug) }}"
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if lesson.slug == lesson_slug %}active{% endif %}"
+        >
+          {{ lesson.title }}
+          {% if lesson.exercises|length %}
+          <span class="badge bg-primary rounded-pill">{{ lesson.exercises|length }}</span>
+          {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- CONTEÚDO -->
+    <div class="col-lg-9">
+      <h1 class="display-5 fw-bold mb-4">{{ current.title }}</h1>
+
+      {% if current.content %}
+      <div class="lead mb-5">{{ current.content | safe }}</div>
+      {% endif %}
+
+      {% if current.exercises|length %}
+      <hr />
+      <h3>Exercícios práticos</h3>
+      <div class="row g-4">
+        {% for ex_id, ex in current.exercises.items() %}
+        {% set ex_url = url_for('main.exercise', module_slug=module.slug, lesson_slug=lesson_slug, ex_id=ex_id) %}
+        <div class="col-md-6">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="card-title">{{ loop.index }}. {{ ex.title }}</h5>
+              <p class="card-text text-muted small">{{ ex.description | safe }}</p>
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <a href="{{ ex_url }}" class="btn btn-success">Fazer exercício</a>
+                <span class="badge bg-{% if ex_url in completed_exercises %}success{% else %}secondary{% endif %}">
+                  {% if ex_url in completed_exercises %}Concluído{% else %}Pendente{% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-light border">
+        Sem exercícios nesta lição (por enquanto).
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

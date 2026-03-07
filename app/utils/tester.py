@@ -51,15 +51,17 @@ def capture_output():
 def run_user_code(user_code: str, test_code: str):
     output = ""
     try:
+        user_globals = {"__builtins__": SAFE_BUILTINS}
         with capture_output() as out:
             # Executa o código do aluno
-            exec(user_code, {"__builtins__": SAFE_BUILTINS})
+            exec(user_code, user_globals, user_globals)
 
         output = out.getvalue()
 
         # Passa variáveis úteis pro teste
         test_locals = {
             "__output__": output,
+            "__globals__": user_globals,
         }
 
         # Executa o teste
