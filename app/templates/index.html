@@ -43,24 +43,15 @@
     </div>
 </section>
 
-<!-- Contador ao vivo (falso por enquanto, depois vira real) -->
+<!-- Contador ao vivo (valor vindo da CountAPI via JS em base.html) -->
 <section class="py-5 text-center bg-light">
     <div class="container">
         <h2><i class="bi bi-graph-up-arrow"></i> Impacto do projeto</h2>
-        <p class="display-5 fw-bold text-primary" id="impacto">+ 1.247 pessoas já começaram o curso</p>
-        <small>(contagem real via Google Analytics)</small>
+        <p class="display-5 fw-bold text-primary" id="impacto">+ 1.000 pessoas já começaram o curso</p>
+        <small>contagem aproximada baseada em acessos</small>
     </div>
 </section>
 {% endblock %}
 
 {% block scripts %}
-<script>
-// Contador fake subindo (depois vamos trocar por real)
-let contador = 1247;
-setInterval(() => {
-    contador += Math.floor(Math.random() * 3);
-    document.getElementById('impacto').innerText = '+ ' + contador.toLocaleString('pt-BR') + ' pessoas já começaram o curso';
-    document.getElementById('contador-alunos').innerText = contador.toLocaleString('pt-BR');
-}, 8000);
-</script>
 {% endblock %}

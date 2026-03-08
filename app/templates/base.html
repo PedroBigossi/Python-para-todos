@@ -64,6 +64,49 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    // Contador de alunos usando CountAPI (lifetime visitas)
+    document.addEventListener('DOMContentLoaded', function () {
+        var impactoEl = document.getElementById('impacto');
+        var contadorEl = document.getElementById('contador-alunos');
+
+        // Se não existir nenhum dos elementos, não faz nada
+        if (!impactoEl && !contadorEl) {
+            return;
+        }
+
+        var namespace = 'python-para-todos.vercel.app';
+        var key = 'visits';
+        var url = 'https://api.countapi.xyz/hit/' +
+                  encodeURIComponent(namespace) + '/' +
+                  encodeURIComponent(key);
+
+        fetch(url)
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                var valor = data && typeof data.value === 'number' ? data.value : 0;
+                if (impactoEl) {
+                    impactoEl.innerText = '+ ' +
+                        valor.toLocaleString('pt-BR') +
+                        ' pessoas já começaram o curso';
+                }
+                if (contadorEl) {
+                    contadorEl.innerText = valor.toLocaleString('pt-BR');
+                }
+            })
+            .catch(function () {
+                // Fallback simples se a API estiver fora do ar
+                if (impactoEl) {
+                    impactoEl.innerText = '+ 1.000 pessoas já começaram o curso';
+                }
+                if (contadorEl) {
+                    contadorEl.innerText = '1.000';
+                }
+            });
+    });
+    </script>
+
     {% block scripts %}{% endblock %}
 </body>
 </html>
