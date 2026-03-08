@@ -1,6 +1,9 @@
 # app/__init__.py
 import os
-from flask import Flask
+import logging
+from flask import Flask, jsonify
+
+logger = logging.getLogger(__name__)
 
 def create_app():
     app = Flask(__name__)
@@ -10,5 +13,10 @@ def create_app():
 
     from .routes import main
     app.register_blueprint(main)
+
+    @app.errorhandler(Exception)
+    def handle_error(e):
+        logger.exception("Unhandled error")
+        return jsonify(error="Internal Server Error"), 500
 
     return app

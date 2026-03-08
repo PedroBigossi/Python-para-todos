@@ -104,7 +104,8 @@ def exercise(module_slug, lesson_slug, ex_id):
     exercise_data = exercises[ex_id]
 
     if request.method == 'POST':
-        user_code = request.get_json().get('code', '')
+        payload = request.get_json(silent=True) or {}
+        user_code = payload.get('code', '')
         result = run_user_code(user_code, exercise_data['test_code'])
 
         if result['success']:
